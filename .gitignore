@@ -1,6 +1,6 @@
 .DS_Store
-dist
 example/package-example.js
 lib
 node_modules
+.idea
 npm-debug.log

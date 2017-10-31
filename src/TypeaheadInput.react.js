@@ -47,9 +47,11 @@ class TypeaheadInput extends React.Component {
       placeholder,
       selected,
       value,
+      extraProps = {}
     } = this.props;
 
     const inputProps = {
+      ...extraProps,
       bsSize,
       disabled,
       hasAux,
@@ -208,7 +210,15 @@ TypeaheadInput.propTypes = {
    * Placeholder text for the input.
    */
   placeholder: PropTypes.string,
+
+  /**
+   * Extra properties for the input.
+  */
+  extraProps: PropTypes.object
 };
 
+TypeaheadInput.defaultProps = {
+  extraProps: {}
+};
 
 export default TypeaheadInput;
