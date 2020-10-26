@@ -176,8 +176,6 @@ class Typeahead extends React.Component {
 
     this._updateSelected([]);
     this._updateText('');
-
-    this.props.onClear();
   }
 
   focus = () => {
@@ -297,10 +295,15 @@ class Typeahead extends React.Component {
         <ClearButton
           bsSize={bsSize}
           className="bootstrap-typeahead-clear-button"
-          onClick={this.clear}
+          onClick={this._handleClear}
         />
       );
     }
+  }
+
+  _handleClear = () => {
+    this.clear();
+    this.props.onClear();
   }
 
   _handleActiveItemChange = activeItem => {

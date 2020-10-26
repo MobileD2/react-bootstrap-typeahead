@@ -2917,8 +2917,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      _this._updateSelected([]);
 	      _this._updateText('');
-
-	      _this.props.onClear();
 	    };
 
 	    _this.focus = function () {
@@ -3046,9 +3044,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return _react2.default.createElement(_ClearButton2.default, {
 	          bsSize: bsSize,
 	          className: 'bootstrap-typeahead-clear-button',
-	          onClick: _this.clear
+	          onClick: _this._handleClear
 	        });
 	      }
+	    };
+
+	    _this._handleClear = function () {
+	      _this.clear();
+	      _this.props.onClear();
 	    };
 
 	    _this._handleActiveItemChange = function (activeItem) {
