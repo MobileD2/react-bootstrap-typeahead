@@ -176,6 +176,8 @@ class Typeahead extends React.Component {
 
     this._updateSelected([]);
     this._updateText('');
+
+    this.props.onClear();
   }
 
   focus = () => {
@@ -196,7 +198,14 @@ class Typeahead extends React.Component {
     } = this.props;
     const {activeIndex, activeItem, initialItem, selected, text} = this.state;
     const Input = multiple ? TokenizerInput : TypeaheadInput;
-    const inputProps = {extraProps, bsSize, disabled, name, placeholder, renderToken};
+    const inputProps = {
+      extraProps,
+      bsSize,
+      disabled,
+      name,
+      placeholder,
+      renderToken,
+    };
 
     return (
       <Input
@@ -569,6 +578,10 @@ Typeahead.propTypes = {
    */
   onPaginate: PropTypes.func,
   /**
+   * Invoked when the clear button is clicked.
+   */
+  onClear: PropTypes.func,
+  /**
    * Full set of options, including pre-selected options. Must either be an
    * array of objects (recommended) or strings.
    */
@@ -616,6 +629,7 @@ Typeahead.defaultProps = {
   onFocus: noop,
   onInputChange: noop,
   onPaginate: noop,
+  onClear: noop,
   paginate: true,
   selected: [],
   submitFormOnEnter: false,
