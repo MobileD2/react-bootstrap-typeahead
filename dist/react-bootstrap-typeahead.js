@@ -3033,7 +3033,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          bsSize = _this$props4.bsSize,
 	          clearButton = _this$props4.clearButton,
 	          disabled = _this$props4.disabled,
-	          isLoading = _this$props4.isLoading;
+	          isLoading = _this$props4.isLoading,
+	          onClear = _this$props4.onClear;
 
 
 	      if (isLoading) {
@@ -3044,14 +3045,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return _react2.default.createElement(_ClearButton2.default, {
 	          bsSize: bsSize,
 	          className: 'bootstrap-typeahead-clear-button',
-	          onClick: _this._handleClear
+	          onClick: function onClick() {
+	            _this.clear();
+	            onClear();
+	          }
 	        });
 	      }
-	    };
-
-	    _this._handleClear = function () {
-	      _this.clear();
-	      _this.props.onClear();
 	    };
 
 	    _this._handleActiveItemChange = function (activeItem) {

@@ -284,7 +284,7 @@ class Typeahead extends React.Component {
   }
 
   _renderAux = () => {
-    const {bsSize, clearButton, disabled, isLoading} = this.props;
+    const {bsSize, clearButton, disabled, isLoading, onClear} = this.props;
 
     if (isLoading) {
       return <Loader bsSize={bsSize} />;
@@ -295,15 +295,13 @@ class Typeahead extends React.Component {
         <ClearButton
           bsSize={bsSize}
           className="bootstrap-typeahead-clear-button"
-          onClick={this._handleClear}
+          onClick={() => {
+            this.clear();
+            onClear();
+          }}
         />
       );
     }
-  }
-
-  _handleClear = () => {
-    this.clear();
-    this.props.onClear();
   }
 
   _handleActiveItemChange = activeItem => {
