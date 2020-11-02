@@ -3265,7 +3265,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            return containerRectJson === prevRectJson ? null : { containerRect: containerRect };
 	          });
-	        }, 10);
+	        }, _this.props.containerRectPolling);
 	      }
 	    };
 
@@ -3500,7 +3500,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * Propagate <RETURN> event to parent form.
 	   */
-	  submitFormOnEnter: _propTypes2.default.bool
+	  submitFormOnEnter: _propTypes2.default.bool,
+	  /**
+	   * Time interval for updating container rect
+	   */
+	  containerRectPolling: _propTypes2.default.number
 	};
 
 	Typeahead.defaultProps = {
@@ -3526,7 +3530,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  onClear: _noop3.default,
 	  paginate: true,
 	  selected: [],
-	  submitFormOnEnter: false
+	  submitFormOnEnter: false,
+	  containerRectPolling: 50
 	};
 
 	Typeahead.childContextTypes = {
