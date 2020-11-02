@@ -3272,7 +3272,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      (0, _warn2.default)(!(typeof labelKey === 'function' && allowNew), '`labelKey` must be a string if creating new options is allowed.');
 
-	      this.getRectInterval && clearInterval(this.getRectInterval);
+	      clearInterval(this.getRectInterval);
 	    }
 	  }, {
 	    key: 'componentDidMount',
@@ -3281,19 +3281,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      this.props.autoFocus && this.focus();
 
-	      if (this.props.renderMenu) {
-	        this.getRectInterval = setInterval(function () {
-	          _this2.setState(function (_ref) {
-	            var prevContainerRect = _ref.containerRect;
+	      this.getRectInterval = setInterval(function () {
+	        _this2.setState(function (_ref) {
+	          var prevContainerRect = _ref.containerRect;
 
-	            var containerRect = _this2.el.current.getBoundingClientRect();
-	            var rectJson = JSON.stringify(containerRect);
-	            var prevRectJson = JSON.stringify(prevContainerRect);
+	          var containerRect = _this2.el.current.getBoundingClientRect();
 
-	            return rectJson === prevRectJson ? null : { containerRect: containerRect };
-	          });
-	        }, 10);
-	      }
+	          return JSON.stringify(containerRect) === JSON.stringify(prevContainerRect) ? null : { containerRect: containerRect };
+	        });
+	      }, 10);
 	    }
 	  }, {
 	    key: 'componentWillReceiveProps',

@@ -71,33 +71,32 @@ class Typeahead extends React.Component {
     warn(
       !(typeof filterBy === 'function' && (caseSensitive || !ignoreDiacritics)),
       'Your `filterBy` function will override the `caseSensitive` and ' +
-      '`ignoreDiacritics` props.',
+      '`ignoreDiacritics` props.'
     );
 
     warn(
       !(typeof labelKey === 'function' && allowNew),
-      '`labelKey` must be a string if creating new options is allowed.',
+      '`labelKey` must be a string if creating new options is allowed.'
     );
 
-    this.getRectInterval && clearInterval(this.getRectInterval);
+    clearInterval(this.getRectInterval);
   }
 
   componentDidMount() {
     this.props.autoFocus && this.focus();
 
-    if (this.props.renderMenu) {
-      this.getRectInterval = setInterval(() => {
-        this.setState(({containerRect: prevContainerRect}) => {
-          const containerRect = this.el.current.getBoundingClientRect();
-          const rectJson = JSON.stringify(containerRect);
-          const prevRectJson = JSON.stringify(prevContainerRect);
+    this.getRectInterval = setInterval(() => {
+      this.setState(({containerRect: prevContainerRect}) => {
+        const containerRect = this.el.current.getBoundingClientRect();
 
-          return (
-            rectJson === prevRectJson ? null : {containerRect}
-          );
-        });
-      }, 10);
-    }
+        return (
+          JSON.stringify(containerRect) === JSON.stringify(prevContainerRect) ?
+            null
+         :
+            {containerRect}
+        );
+      });
+    }, 10);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -172,17 +171,17 @@ class Typeahead extends React.Component {
         text,
         labelKey,
         multiple && !!find(selected, o => isEqual(o, option)),
-        {caseSensitive, ignoreDiacritics, fields: filterBy},
+        {caseSensitive, ignoreDiacritics, fields: filterBy}
       ) :
       option => filterBy(option, text);
 
     return options.filter(callback);
-  };
+  }
 
   blur = () => {
     this.el.blur();
     this._hideDropdown();
-  };
+  }
 
   /**
    * Public method to allow external clearing of the input. Clears both text
@@ -193,11 +192,11 @@ class Typeahead extends React.Component {
 
     this._updateSelected([]);
     this._updateText('');
-  };
+  }
 
   focus = () => {
     this.el.focus();
-  };
+  }
 
   _renderInput = results => {
     const {
@@ -250,7 +249,7 @@ class Typeahead extends React.Component {
         value={getInputText({activeItem, labelKey, multiple, selected, text})}
       />
     );
-  };
+  }
 
   _renderMenu = (results, shouldPaginate, containerRect) => {
     const {
@@ -298,13 +297,13 @@ class Typeahead extends React.Component {
         {menu}
       </Overlay>
     );
-  };
+  }
 
   _renderAux = () => {
     const {bsSize, clearButton, disabled, isLoading, onClear} = this.props;
 
     if (isLoading) {
-      return <Loader bsSize={bsSize}/>;
+      return <Loader bsSize={bsSize} />;
     }
 
     if (clearButton && !disabled && this.state.selected.length) {
@@ -319,22 +318,22 @@ class Typeahead extends React.Component {
         />
       );
     }
-  };
+  }
 
   _handleActiveItemChange = activeItem => {
     this.setState({activeItem});
-  };
+  }
 
   _handleBlur = e => {
     // Note: Don't hide the menu here, since that interferes with other actions
     // like making a selection by clicking on a menu item.
     this.props.onBlur(e);
-  };
+  }
 
   _handleFocus = e => {
     this.props.onFocus(e);
     this.setState({showMenu: true});
-  };
+  }
 
   _handleInitialItemChange = initialItem => {
     const currentItem = this.state.initialItem;
@@ -352,13 +351,13 @@ class Typeahead extends React.Component {
     if (
       isEqual(initialItem, currentItem) ||
       (initialItem.customOption &&
-        initialItem[labelKey] === currentItem[labelKey])
+       initialItem[labelKey] === currentItem[labelKey])
     ) {
       return;
     }
 
     this.setState({initialItem});
-  };
+  }
 
   _handleTextChange = text => {
     const {activeIndex, activeItem} = getInitialState(this.props);
@@ -368,7 +367,7 @@ class Typeahead extends React.Component {
       showMenu: true,
     });
     this._updateText(text);
-  };
+  }
 
   _handleKeydown = (options, e) => {
     const {activeItem, showMenu} = this.state;
@@ -424,7 +423,7 @@ class Typeahead extends React.Component {
         }
         break;
     }
-  };
+  }
 
   _handleAddOption = selectedOption => {
     const {multiple, labelKey} = this.props;
@@ -449,14 +448,14 @@ class Typeahead extends React.Component {
     this._updateText(text);
 
     this.setState({initialItem: selectedOption});
-  };
+  }
 
   _handlePagination = e => {
     const {maxResults, onPaginate} = this.props;
 
     onPaginate(e);
     this.setState({shownResults: this.state.shownResults + maxResults});
-  };
+  }
 
   _handleRemoveOption = removedOption => {
     const selected = this.state.selected.filter(option => (
@@ -467,14 +466,14 @@ class Typeahead extends React.Component {
     this.focus();
     this._hideDropdown();
     this._updateSelected(selected);
-  };
+  }
 
   /**
    * From `onClickOutside` HOC.
    */
   handleClickOutside = e => {
     this.state.showMenu && this._hideDropdown();
-  };
+  }
 
   _hideDropdown = () => {
     const {
@@ -490,17 +489,17 @@ class Typeahead extends React.Component {
       showMenu,
       shownResults,
     });
-  };
+  }
 
   _updateSelected = selected => {
     this.setState({selected});
     this.props.onChange(selected);
-  };
+  }
 
   _updateText = text => {
     this.setState({text});
     this.props.onInputChange(text);
-  };
+  }
 }
 
 Typeahead.propTypes = {
