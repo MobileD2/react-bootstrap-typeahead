@@ -30,7 +30,6 @@ function getInitialState(props) {
   }
 
   return {
-    containerRect: {},
     activeIndex: -1,
     activeItem: null,
     initialItem: null,
@@ -78,25 +77,10 @@ class Typeahead extends React.Component {
       !(typeof labelKey === 'function' && allowNew),
       '`labelKey` must be a string if creating new options is allowed.'
     );
-
-    clearInterval(this.getRectInterval);
   }
 
   componentDidMount() {
     this.props.autoFocus && this.focus();
-
-    this.getRectInterval = setInterval(() => {
-      this.setState(({containerRect: prevContainerRect}) => {
-        const containerRect = this.el.current.getBoundingClientRect();
-
-        return (
-          JSON.stringify(containerRect) === JSON.stringify(prevContainerRect) ?
-            null
-         :
-            {containerRect}
-        );
-      });
-    }, 10);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -120,7 +104,7 @@ class Typeahead extends React.Component {
 
   render() {
     const {allowNew, className, dropup, labelKey, paginate} = this.props;
-    const {shownResults, text, containerRect} = this.state;
+    const {shownResults, text} = this.state;
 
     // First filter the results by the input string.
     let results = this._getFilteredResults();
@@ -144,7 +128,7 @@ class Typeahead extends React.Component {
         style={{position: 'relative'}}>
         {this._renderInput(results)}
         {this._renderAux()}
-        {this._renderMenu(results, shouldPaginate, containerRect)}
+        {this._renderMenu(results, shouldPaginate, this.clientRect)}
       </div>
     );
   }
@@ -244,14 +228,17 @@ class Typeahead extends React.Component {
         onKeyDown={e => this._handleKeydown(results, e)}
         onRemove={this._handleRemoveOption}
         options={results}
-        ref={el => this.el = el}
+        ref={el => {
+          this.clientRect = el.getBoundingClientRect();
+          this.el = el;
+        }}
         selected={selected.slice()}
         value={getInputText({activeItem, labelKey, multiple, selected, text})}
       />
     );
   }
 
-  _renderMenu = (results, shouldPaginate, containerRect) => {
+  _renderMenu = (results, shouldPaginate, clientRect) => {
     const {
       align,
       bodyContainer,
@@ -282,7 +269,7 @@ class Typeahead extends React.Component {
     };
 
     const menu = renderMenu ?
-      renderMenu(results, menuProps, containerRect) :
+      renderMenu(results, menuProps, clientRect) :
       <TypeaheadMenu
         {...menuProps}
         options={results}
