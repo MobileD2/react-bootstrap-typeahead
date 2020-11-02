@@ -2856,6 +2856,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  return {
+	    containerRect: {},
 	    activeIndex: -1,
 	    activeItem: null,
 	    initialItem: null,
@@ -2975,15 +2976,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        onRemove: _this._handleRemoveOption,
 	        options: results,
 	        ref: function ref(el) {
-	          _this.clientRect = el.getBoundingClientRect();
-	          _this.el = el;
+	          return _this.el = el;
 	        },
 	        selected: selected.slice(),
 	        value: (0, _getInputText2.default)({ activeItem: activeItem, labelKey: labelKey, multiple: multiple, selected: selected, text: text })
 	      }));
 	    };
 
-	    _this._renderMenu = function (results, shouldPaginate, clientRect) {
+	    _this._renderMenu = function (results, shouldPaginate, containerRect) {
 	      var _this$props3 = _this.props,
 	          align = _this$props3.align,
 	          bodyContainer = _this$props3.bodyContainer,
@@ -3014,7 +3014,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        text: text
 	      };
 
-	      var menu = renderMenu ? renderMenu(results, menuProps, clientRect) : _react2.default.createElement(_TypeaheadMenu2.default, _extends({}, menuProps, {
+	      var menu = renderMenu ? renderMenu(results, menuProps, containerRect) : _react2.default.createElement(_TypeaheadMenu2.default, _extends({}, menuProps, {
 	        options: results,
 	        renderMenuItemChildren: renderMenuItemChildren
 	      }));
@@ -3271,11 +3271,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	      (0, _warn2.default)(!(typeof filterBy === 'function' && (caseSensitive || !ignoreDiacritics)), 'Your `filterBy` function will override the `caseSensitive` and ' + '`ignoreDiacritics` props.');
 
 	      (0, _warn2.default)(!(typeof labelKey === 'function' && allowNew), '`labelKey` must be a string if creating new options is allowed.');
+
+	      clearInterval(this.getRectInterval);
 	    }
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
+	      var _this2 = this;
+
 	      this.props.autoFocus && this.focus();
+
+	      this.getRectInterval = setInterval(function () {
+	        _this2.setState(function (_ref) {
+	          var prevContainerRect = _ref.containerRect;
+
+	          var containerRect = _this2.el.current.getBoundingClientRect();
+
+	          return JSON.stringify(containerRect) === JSON.stringify(prevContainerRect) ? null : { containerRect: containerRect };
+	        });
+	      }, 10);
 	    }
 	  }, {
 	    key: 'componentWillReceiveProps',
@@ -3310,7 +3324,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          paginate = _props2.paginate;
 	      var _state = this.state,
 	          shownResults = _state.shownResults,
-	          text = _state.text;
+	          text = _state.text,
+	          containerRect = _state.containerRect;
 
 	      // First filter the results by the input string.
 
@@ -3336,7 +3351,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          style: { position: 'relative' } },
 	        this._renderInput(results),
 	        this._renderAux(),
-	        this._renderMenu(results, shouldPaginate, this.clientRect)
+	        this._renderMenu(results, shouldPaginate, containerRect)
 	      );
 	    }
 
