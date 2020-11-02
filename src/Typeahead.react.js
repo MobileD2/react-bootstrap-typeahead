@@ -1,8 +1,7 @@
 import cx from 'classnames';
-import {find, isEqual, noop, result} from 'lodash';
+import {find, isEqual, noop} from 'lodash';
 import onClickOutside from 'react-onclickoutside';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
 import ClearButton from './ClearButton.react';
@@ -121,12 +120,6 @@ class Typeahead extends React.Component {
       results = addCustomOption(results, text, labelKey);
     }
 
-    const clientRect = result(
-      ReactDOM.findDOMNode(this.refs.input),
-      'getBoundingClientRect',
-      {}
-    );
-
     return (
       <div
         className={cx('bootstrap-typeahead', 'clearfix', 'open', {
@@ -135,7 +128,7 @@ class Typeahead extends React.Component {
         style={{position: 'relative'}}>
         {this._renderInput(results)}
         {this._renderAux()}
-        {this._renderMenu(results, shouldPaginate, clientRect)}
+        {this._renderMenu(results, shouldPaginate, this.clientRect)}
       </div>
     );
   }
@@ -170,7 +163,7 @@ class Typeahead extends React.Component {
   }
 
   blur = () => {
-    this.refs.input.blur();
+    this.el.blur();
     this._hideDropdown();
   }
 
@@ -186,7 +179,7 @@ class Typeahead extends React.Component {
   }
 
   focus = () => {
-    this.refs.input.focus();
+    this.el.focus();
   }
 
   _renderInput = results => {
@@ -235,7 +228,10 @@ class Typeahead extends React.Component {
         onKeyDown={e => this._handleKeydown(results, e)}
         onRemove={this._handleRemoveOption}
         options={results}
-        ref="input"
+        ref={el => {
+          this.clientRect = el.getBoundingClientRect();
+          this.el = el;
+        }}
         selected={selected.slice()}
         value={getInputText({activeItem, labelKey, multiple, selected, text})}
       />
@@ -284,7 +280,7 @@ class Typeahead extends React.Component {
       <Overlay
         container={bodyContainer ? document.body : this}
         show={showMenu && text.length >= minLength}
-        target={() => this.refs.input}>
+        target={() => this.el}>
         {menu}
       </Overlay>
     );
