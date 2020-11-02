@@ -21,7 +21,6 @@
     "react-bootstrap",
     "react-bootstrap-tokenizer",
     "react-bootstrap-typeahead",
-    "react-dom",
     "tokenizer",
     "typeahead"
   ],
