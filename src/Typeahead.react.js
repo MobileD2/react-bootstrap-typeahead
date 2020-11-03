@@ -270,6 +270,7 @@ class Typeahead extends React.Component {
       labelKey,
       maxHeight,
       newSelectionPrefix,
+      renderMenuItemChildren,
       paginationText,
       onPaginate: this._handlePagination,
       paginate: shouldPaginate,
@@ -667,7 +668,7 @@ Typeahead.defaultProps = {
   paginate: true,
   selected: [],
   submitFormOnEnter: false,
-  containerRectPolling: 50,
+  containerRectPolling: 100,
 };
 
 Typeahead.childContextTypes = {

@@ -3018,6 +3018,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        labelKey: labelKey,
 	        maxHeight: maxHeight,
 	        newSelectionPrefix: newSelectionPrefix,
+	        renderMenuItemChildren: renderMenuItemChildren,
 	        paginationText: paginationText,
 	        onPaginate: _this._handlePagination,
 	        paginate: shouldPaginate,
@@ -3531,7 +3532,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  paginate: true,
 	  selected: [],
 	  submitFormOnEnter: false,
-	  containerRectPolling: 50
+	  containerRectPolling: 100
 	};
 
 	Typeahead.childContextTypes = {
