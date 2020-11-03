@@ -500,16 +500,17 @@ class Typeahead extends React.Component {
   _updateContainerRect = () => {
     if (this.refs.input) {
       this.containerRectUpdater = setInterval(() => {
-        const {containerRect: prevContainerRect} = this.state;
-        const containerRect = result(
-          ReactDOM.findDOMNode(this.refs.input),
-          'getBoundingClientRect',
-          {}
-        );
+        this.setState(({containerRect: prevContainerRect}) => {
+          const containerRect = result(
+            ReactDOM.findDOMNode(this.refs.input),
+            'getBoundingClientRect',
+            {}
+          );
+          const containerRectJson = JSON.stringify(containerRect);
+          const prevRectJson = JSON.stringify(prevContainerRect);
 
-        if (!isEqual(containerRect, prevContainerRect)) {
-          this.setState({containerRect});
-        }
+          return containerRectJson === prevRectJson ? null : {containerRect};
+        });
       }, this.props.containerRectPolling);
     }
   }

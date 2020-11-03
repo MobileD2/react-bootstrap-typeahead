@@ -3257,13 +3257,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _this._updateContainerRect = function () {
 	      if (_this.refs.input) {
 	        _this.containerRectUpdater = setInterval(function () {
-	          var prevContainerRect = _this.state.containerRect;
+	          _this.setState(function (_ref) {
+	            var prevContainerRect = _ref.containerRect;
 
-	          var containerRect = (0, _result3.default)(_reactDom2.default.findDOMNode(_this.refs.input), 'getBoundingClientRect', {});
+	            var containerRect = (0, _result3.default)(_reactDom2.default.findDOMNode(_this.refs.input), 'getBoundingClientRect', {});
+	            var containerRectJson = JSON.stringify(containerRect);
+	            var prevRectJson = JSON.stringify(prevContainerRect);
 
-	          if (!(0, _isEqual3.default)(containerRect, prevContainerRect)) {
-	            _this.setState({ containerRect: containerRect });
-	          }
+	            return containerRectJson === prevRectJson ? null : { containerRect: containerRect };
+	          });
 	        }, _this.props.containerRectPolling);
 	      }
 	    };
