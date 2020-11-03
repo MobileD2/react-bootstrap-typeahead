@@ -510,7 +510,7 @@ class Typeahead extends React.Component {
 
           return containerRectJson === prevRectJson ? null : {containerRect};
         });
-      }, this.props.containerRectPolling);
+      }, 10);
     }
   }
 }
@@ -637,10 +637,6 @@ Typeahead.propTypes = {
    * Propagate <RETURN> event to parent form.
    */
   submitFormOnEnter: PropTypes.bool,
-  /**
-   * Time interval for updating container rect
-   */
-  containerRectPolling: PropTypes.number,
 };
 
 Typeahead.defaultProps = {
@@ -667,7 +663,6 @@ Typeahead.defaultProps = {
   paginate: true,
   selected: [],
   submitFormOnEnter: false,
-  containerRectPolling: 50,
 };
 
 Typeahead.childContextTypes = {
