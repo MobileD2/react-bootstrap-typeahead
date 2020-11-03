@@ -1,7 +1,6 @@
 import cx from 'classnames';
 import {find, isEqual, result, noop} from 'lodash';
 import onClickOutside from 'react-onclickoutside';
-import {Portal as ReactPortal} from 'react-portal';
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
@@ -87,7 +86,7 @@ class Typeahead extends React.Component {
   }
 
   shouldUpdateContainerRect = () => (
-    this.props.portalMenu
+    this.props.renderMenu
   );
 
   componentDidMount() {
@@ -260,7 +259,6 @@ class Typeahead extends React.Component {
       paginationText,
       renderMenu,
       renderMenuItemChildren,
-      portalMenu,
     } = this.props;
 
     const {showMenu, text} = this.state;
@@ -278,9 +276,14 @@ class Typeahead extends React.Component {
       paginate: shouldPaginate,
       text,
     };
-    const menuMethod = portalMenu ? this._renderPortalMenu : this._renderInlineMenu;
-    const menuRenderer = renderMenu ? renderMenu : menuMethod;
-    const menu = menuRenderer(results, menuProps, containerRect);
+
+    const menu = renderMenu ?
+      renderMenu(results, menuProps, containerRect) :
+      <TypeaheadMenu
+        {...menuProps}
+        options={results}
+        renderMenuItemChildren={renderMenuItemChildren}
+      />;
 
     return (
       <Overlay
@@ -291,34 +294,6 @@ class Typeahead extends React.Component {
       </Overlay>
     );
   }
-
-  _renderInlineMenu = (results, menuProps, containerRect) => {
-    const {renderMenuItemChildren} = this.props;
-
-    return (
-      <TypeaheadMenu
-        {...menuProps}
-        options={results}
-        renderMenuItemChildren={renderMenuItemChildren}
-      />
-    );
-};
-
-  _renderPortalMenu = (results, menuProps, containerRect) => {
-    const {bottom = 0, left = 0, width = 0} = containerRect;
-    const {renderMenuItemChildren} = this.props;
-
-    return (
-      <ReactPortal>
-        <TypeaheadMenu
-          style={{top: bottom, left, width}}
-          {...menuProps}
-          options={results}
-          renderMenuItemChildren={renderMenuItemChildren}
-        />
-      </ReactPortal>
-    );
-  };
 
   _renderAux = () => {
     const {bsSize, clearButton, disabled, isLoading, onClear} = this.props;
@@ -666,10 +641,6 @@ Typeahead.propTypes = {
    * Time interval for updating container rect
    */
   containerRectPolling: PropTypes.number,
-  /**
-   * Draw menu using portal
-   */
-  portalMenu: PropTypes.bool,
 };
 
 Typeahead.defaultProps = {
@@ -697,7 +668,6 @@ Typeahead.defaultProps = {
   selected: [],
   submitFormOnEnter: false,
   containerRectPolling: 100,
-  portalMenu: false,
 };
 
 Typeahead.childContextTypes = {
