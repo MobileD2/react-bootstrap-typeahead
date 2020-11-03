@@ -1,9 +1,9 @@
 import cx from 'classnames';
-import {find, isEqual, result, noop} from 'lodash';
+import {find, isEqual, noop} from 'lodash';
 import onClickOutside from 'react-onclickoutside';
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
+
 import ClearButton from './ClearButton.react';
 import Loader from './Loader.react';
 import Overlay from './Overlay.react';
@@ -30,7 +30,6 @@ function getInitialState(props) {
   }
 
   return {
-    containerRect: {},
     activeIndex: -1,
     activeItem: null,
     initialItem: null,
@@ -68,11 +67,6 @@ class Typeahead extends React.Component {
       labelKey,
     } = this.props;
 
-    if (this.containerRectUpdater !== undefined) {
-      clearInterval(this.containerRectUpdater);
-      this.containerRectUpdater = undefined;
-    }
-
     warn(
       !(typeof filterBy === 'function' && (caseSensitive || !ignoreDiacritics)),
       'Your `filterBy` function will override the `caseSensitive` and ' +
@@ -85,12 +79,7 @@ class Typeahead extends React.Component {
     );
   }
 
-  shouldUpdateContainerRect = () => (
-    this.props.renderMenu
-  );
-
   componentDidMount() {
-    this.shouldUpdateContainerRect() && this._updateContainerRect();
     this.props.autoFocus && this.focus();
   }
 
@@ -115,7 +104,7 @@ class Typeahead extends React.Component {
 
   render() {
     const {allowNew, className, dropup, labelKey, paginate} = this.props;
-    const {shownResults, text, containerRect} = this.state;
+    const {shownResults, text} = this.state;
 
     // First filter the results by the input string.
     let results = this._getFilteredResults();
@@ -139,7 +128,7 @@ class Typeahead extends React.Component {
         style={{position: 'relative'}}>
         {this._renderInput(results)}
         {this._renderAux()}
-        {this._renderMenu(results, shouldPaginate, containerRect)}
+        {this._renderMenu(results, shouldPaginate)}
       </div>
     );
   }
@@ -246,7 +235,7 @@ class Typeahead extends React.Component {
     );
   }
 
-  _renderMenu = (results, shouldPaginate, containerRect) => {
+  _renderMenu = (results, shouldPaginate) => {
     const {
       align,
       bodyContainer,
@@ -277,7 +266,7 @@ class Typeahead extends React.Component {
     };
 
     const menu = renderMenu ?
-      renderMenu(results, menuProps, containerRect) :
+      renderMenu(results, menuProps) :
       <TypeaheadMenu
         {...menuProps}
         options={results}
@@ -494,24 +483,6 @@ class Typeahead extends React.Component {
   _updateText = text => {
     this.setState({text});
     this.props.onInputChange(text);
-  }
-
-  _updateContainerRect = () => {
-    if (this.refs.input) {
-      this.containerRectUpdater = setInterval(() => {
-        this.setState(({containerRect: prevContainerRect}) => {
-          const containerRect = result(
-            ReactDOM.findDOMNode(this.refs.input),
-            'getBoundingClientRect',
-            {}
-          );
-          const containerRectJson = JSON.stringify(containerRect);
-          const prevRectJson = JSON.stringify(prevContainerRect);
-
-          return containerRectJson === prevRectJson ? null : {containerRect};
-        });
-      }, 10);
-    }
   }
 }
 
