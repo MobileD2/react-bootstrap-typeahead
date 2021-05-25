@@ -2563,7 +2563,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return Menu;
 	}(_react2.default.Component);
 
-	Menu.PropTypes = {
+	Menu.propTypes = {
 	  /**
 	   * Specify menu alignment. The default value is `justify`, which makes the
 	   * menu as wide as the input and truncates long values. Specifying `left`
