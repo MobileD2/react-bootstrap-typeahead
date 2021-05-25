@@ -7520,6 +7520,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          bsSize: bsSize,
 	          className: (0, _classnames2.default)('bootstrap-typeahead-input-hint'),
 	          hasAux: hasAux,
+	          onChange: function onChange(e) {},
 	          style: {
 	            borderColor: 'transparent',
 	            bottom: 0,

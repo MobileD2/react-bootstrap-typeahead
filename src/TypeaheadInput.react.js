@@ -92,6 +92,7 @@ class TypeaheadInput extends React.Component {
           bsSize={bsSize}
           className={cx('bootstrap-typeahead-input-hint')}
           hasAux={hasAux}
+          onChange={e => {}}
           style={{
             borderColor: 'transparent',
             bottom: 0,
