@@ -1,18 +1,17 @@
 {
   "plugins": [
-    "lodash",
-    "dev-expression",
+    "lodash"
   ],
   "env": {
     "production": {
       "plugins": [
-        "transform-react-remove-prop-types",
-      ],
+        "transform-react-remove-prop-types"
+      ]
     }
   },
   "presets": [
     "es2015",
     "react",
-    "stage-1",
-  ],
+    "stage-1"
+  ]
 }
